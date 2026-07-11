@@ -1,0 +1,28 @@
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+
+output "eDP-1" {
+    focus-at-startup
+    position x=0 y=0
+
+    hot-corners {
+        top-right
+        bottom-right
+    }
+}
+
+output "HDMI-A-1" {
+    // off
+
+    mode "2560x1440@59.951"
+
+    // position x=-1440 y=-1360
+    // transform "90"
+
+    position x=-2560 y=-240
+
+    hot-corners {
+        top-left
+        bottom-right
+    }
+}

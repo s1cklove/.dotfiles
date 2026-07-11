@@ -1,0 +1,44 @@
+// https://niri-wm.github.io/niri/Configuration:-Layout
+
+layout {
+    gaps 16
+
+    center-focused-column "never"
+    default-column-display "tabbed"
+    empty-workspace-above-first
+
+    // "switch-preset-column-width" (Mod+R)
+    preset-column-widths {
+        proportion 0.5
+        proportion 1.0
+    }
+
+    // "switch-preset-window-height" (Mod+Ctrl+Shift+R)
+    preset-window-heights {
+        proportion 0.5
+        proportion 1.0
+    }
+
+    // default-column-width {}
+
+    border {
+        on
+
+        width 4
+        active-gradient from="#3a96c4" to="#afb3e0" angle=20 relative-to="workspace-view"
+        inactive-gradient from="#3a96c440" to="#afb3e050" angle=20 relative-to="workspace-view"
+    }
+
+    focus-ring {
+        off
+    }
+
+    shadow {
+        on
+
+        softness 15
+        spread 5
+        offset x=0 y=5
+        color "#0007"
+    }
+}
