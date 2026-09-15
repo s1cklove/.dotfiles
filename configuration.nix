@@ -39,6 +39,7 @@
     blueman.enable = true;
     upower.enable = true;
     udisks2.enable = true;
+    desktopManager.plasma6.enable = true;  # for cisco
   };
   
   security = {
@@ -55,12 +56,19 @@
   };
 
   virtualisation = {
-    docker.enable = true;
+    podman.enable = true;
     libvirtd.enable = false;
+    containers.enable = true;
+
+    podman = {
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
   };
 
   boot.kernelModules = [ "kvm-intel" ];
   boot.supportedFilesystems = [ "ntfs" ];  # ability to mount windows
+  boot.kernelParams = [ "pcie_asp=off" ];
 
   users.users.romanzinin = {
     isNormalUser = true;
@@ -69,7 +77,7 @@
       "networkmanager"
       "video"
       "audio"
-      "docker"
+      "podman"
     ];
     shell = pkgs.zsh;
   };
@@ -79,6 +87,7 @@
     zsh.enable = true;
     noctalia-greeter.enable = true;
     nix-ld.enable = true;
+    obs-studio.enable = true;
   };
 
   # List packages installed in system profile.
@@ -97,13 +106,37 @@
     noctalia-shell
     brightnessctl
     wev
-    obsidian
     qt6Packages.qt6ct
     jq
     starship
     btop
     eog
     claude-code
+    python3
+    sage  # math package
+    qbittorrent
+    alsa-utils  # fixing sound issues on monitor connection
+    vlc
+    mpv
+    gnome-text-editor
+    kubectl
+    kubelogin-oidc
+    kubernetes-helm
+    alembic
+    k9s
+    zip
+    duckdb
+    sqlite
+    mc
+    openssl
+    pkg-config
+    docker-compose
+    google-chrome
+    gcc
+    ffmpeg
+    kdePackages.kdenlive
+    networkmanager-openconnect  # NetworkManager VPN plugin (GUI/nmcli)
+    openconnect                 # openconnect CLI binary
   ];
 
   xdg.portal = {
@@ -162,6 +195,43 @@
     icu
     # add more here if you hit further "cannot open shared object file" errors
   ];
+
+  services.nginx = {
+    enable = true;
+    appendHttpConfig = ''
+      include /etc/nginx/sites-enabled/*;
+    '';
+  };
+
+  environment.etc."nginx/sites-available/lectory".text = ''
+    server {
+        listen 443 ssl;
+        server_name localhost;
+
+        ssl_certificate /etc/nginx/ssl/localhost.crt;
+        ssl_certificate_key /etc/nginx/ssl/localhost.key;
+
+        location /ws/ {
+            proxy_pass http://localhost:8000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
+            proxy_read_timeout 86400;
+        }
+
+        location / {
+            proxy_pass http://localhost:8000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+  '';
+
+  environment.etc."nginx/sites-enabled/lectory".source =
+    config.environment.etc."nginx/sites-available/lectory".source;
 
   system.stateVersion = "26.05"; # Don't change
 }

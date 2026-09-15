@@ -9,6 +9,12 @@
   home.packages = with pkgs; [
     inputs.zen-browser.packages.x86_64-linux.default
     git
+
+    # int128/kubelogin has a different name
+    (runCommand "kubelogin-alias" {} ''
+      mkdir -p $out/bin
+      ln -s ${kubelogin-oidc}/bin/kubectl-oidc_login $out/bin/kubelogin
+    '')
   ];
 
   imports = [
