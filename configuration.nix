@@ -93,50 +93,64 @@
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
+    # cli utils
     nano
     wget
-    fuzzel
-    tree
-    xwayland-satellite
-    telegram-desktop
-    kdePackages.polkit-kde-agent-1
-    nautilus
-    vscode
-    blueman
-    noctalia-shell
-    brightnessctl
-    wev
-    qt6Packages.qt6ct
-    jq
-    starship
     btop
-    eog
-    claude-code
-    python3
-    sage  # math package
-    qbittorrent
+    tree
+    zip
+    mc
+    starship
+    fuzzel
+
+    # wayland problems
+    xwayland-satellite
+    kdePackages.polkit-kde-agent-1
+    qt6Packages.qt6ct # qt-compatibility for apps like happ
+    wev
+
+    # nixos bicycles
     alsa-utils  # fixing sound issues on monitor connection
+    pkg-config
+    noctalia-shell
+    blueman  # aka bluetooth manager
+    brightnessctl
+    jq
+
+    # apps
+    google-chrome  # chromium fallback
+    telegram-desktop
+    vscode
+    qbittorrent
+
+
+    # media + text ui
+    gnome-text-editor
+    nautilus
+    eog
     vlc
     mpv
-    gnome-text-editor
+
+    # kubernetes
     kubectl
     kubelogin-oidc
     kubernetes-helm
-    alembic
     k9s
-    zip
-    duckdb
-    sqlite
-    mc
-    openssl
-    pkg-config
-    docker-compose
-    google-chrome
-    gcc
+
+    # lectory utils
+    alembic
     ffmpeg
     kdePackages.kdenlive
-    networkmanager-openconnect  # NetworkManager VPN plugin (GUI/nmcli)
-    openconnect                 # openconnect CLI binary
+
+    # utilities
+    claude-code
+    docker-compose
+    python3
+    openssl
+    duckdb
+    sqlite
+    gcc
+    openconnect  # for job vpn
   ];
 
   xdg.portal = {
